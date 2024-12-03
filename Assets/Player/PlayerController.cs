@@ -12,8 +12,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     protected Rigidbody2D playerBody; // player Rigidbody
     [SerializeField]
-    private PolygonCollider2D playerCollider; // player Collider
-    [SerializeField]
     private CapsuleCollider2D feet;
     [SerializeField]
     private Transform playerSpriteTransform; // position of sprites (for animation handling)
@@ -75,13 +73,13 @@ public class PlayerController : MonoBehaviour
         fps = Application.targetFrameRate;
 
         // if player is falling with at least ___ speed
-        if (playerBody.velocity.y < fallSpeedYDdampingTreshold && !CameraManager.instance.IsLerpingYDamping && !CameraManager.instance.LerpedFromLayerFalling)
+        if (playerBody.linearVelocity.y < fallSpeedYDdampingTreshold && !CameraManager.instance.IsLerpingYDamping && !CameraManager.instance.LerpedFromLayerFalling)
         {
             CameraManager.instance.LerpYDamping(true);
         }
 
         // if standing still or moving up
-        if (playerBody.velocity.y >= 0f && !CameraManager.instance.IsLerpingYDamping && CameraManager.instance.LerpedFromLayerFalling)
+        if (playerBody.linearVelocity.y >= 0f && !CameraManager.instance.IsLerpingYDamping && CameraManager.instance.LerpedFromLayerFalling)
         {
             //reset so it can be called again
             CameraManager.instance.LerpedFromLayerFalling = false;
@@ -96,12 +94,12 @@ public class PlayerController : MonoBehaviour
     {
         bool hitCeling = Physics2D.OverlapBox(ceilingCheck.position, feet.size * 0.85f, 0f, WhatIsGround);
 
-        var velocity = playerBody.velocity;
+        var velocity = playerBody.linearVelocity;
 
         if (hitCeling)
         {
             velocity.y = -0.01f;
-            velocity = playerBody.velocity;
+            velocity = playerBody.linearVelocity;
             isJumping = false;
         }
     }
@@ -136,7 +134,7 @@ public class PlayerController : MonoBehaviour
         float calculatedMove = Input.GetAxisRaw("Horizontal") * playerSpeed;
 
         //move player
-        playerBody.velocity = new Vector2(calculatedMove, playerBody.velocity.y);
+        playerBody.linearVelocity = new Vector2(calculatedMove, playerBody.linearVelocity.y);
 
 
 
@@ -158,7 +156,7 @@ public class PlayerController : MonoBehaviour
         //working jump? WORKING JUMP YAYYYYYYYYYYYYYYYYYYYY
 
         
-        var velocity = playerBody.velocity;
+        var velocity = playerBody.linearVelocity;
         
  
         if(pressedJump && grounded)
@@ -173,7 +171,7 @@ public class PlayerController : MonoBehaviour
             {
                 //playerBody.velocity = Vector2.up * jumpForce;
                 velocity.y = jumpForce;
-                playerBody.velocity = velocity;
+                playerBody.linearVelocity = velocity;
                 jumpTimeCounter -= Time.deltaTime;
 
             }
