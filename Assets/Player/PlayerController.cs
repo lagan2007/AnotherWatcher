@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -12,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     protected Rigidbody2D playerBody; // player Rigidbody
     [SerializeField]
-    private CapsuleCollider2D feet;
+    private CapsuleCollider2D feet; // player capsule collider for bottom part
     [SerializeField]
     private Transform playerSpriteTransform; // position of sprites (for animation handling)
     [SerializeField]
@@ -31,6 +32,10 @@ public class PlayerController : MonoBehaviour
     private Transform ceilingCheck;
     [SerializeField]
     private int fpsSet;
+    [SerializeField]
+    private Animator animator;
+
+
     public float jumpTimeCounter; // how long is player already jumping for
 
     float jumpCount = 0; // maximal possible number of double-jumps
@@ -58,6 +63,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         grounded = IsGrounded();
+
+        animator.SetFloat("PlayerSpeed", Mathf.Abs(playerBody.linearVelocityX));
+
         Debug.DrawLine(playerTransform.position, playerSpriteTransform.position, Color.green, 2); // just to visualize movement of player
         if (grounded)
         {
@@ -86,6 +94,8 @@ public class PlayerController : MonoBehaviour
 
             CameraManager.instance.LerpYDamping(false);
         }
+
+        
     }
 
    
@@ -136,7 +146,7 @@ public class PlayerController : MonoBehaviour
         //move player
         playerBody.linearVelocity = new Vector2(calculatedMove, playerBody.linearVelocity.y);
 
-
+        
 
         //rotate player based on input
         if (Input.GetAxisRaw("Horizontal") < 0)
