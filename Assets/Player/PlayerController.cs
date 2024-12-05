@@ -71,29 +71,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        grounded = IsGrounded();
+        GroundedManagment();
 
         animator.SetFloat("PlayerSpeed", Mathf.Abs(playerBody.linearVelocityX));
         animator.SetFloat("PlayerFallSpeed", playerBody.linearVelocityY);
 
         Debug.DrawLine(playerTransform.position, playerSpriteTransform.position, Color.green, 2); // just to visualize movement of player
 
-        if (grounded)
-        {
-
-            jumpTimeCounter = jumpTime;
-            playerBody.gravityScale = 0;
-            animator.SetBool("Grounded", true);
-            if (!isDashing)
-            {
-                dashTimeCounter = dashTime;
-            }
-        }
-        else
-        {
-            playerBody.gravityScale = 10;
-            animator.SetBool("Grounded", false);
-        }
+        
 
         SpaceBarPressed();
         holdingJump = SpaceBarHold();
@@ -175,12 +160,36 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        GroundedManagment();
+
         if (!isDashing)
         {
             Move(); // movement to left and right
             Jump();
         }
         Dash();
+    }
+
+    private void GroundedManagment()
+    {
+        grounded = IsGrounded();
+
+        if (grounded)
+        {
+
+            jumpTimeCounter = jumpTime;
+            playerBody.gravityScale = 0;
+            animator.SetBool("Grounded", true);
+            if (!isDashing)
+            {
+                dashTimeCounter = dashTime;
+            }
+        }
+        else
+        {
+            playerBody.gravityScale = 10;
+            animator.SetBool("Grounded", false);
+        }
     }
 
     private void Move()
