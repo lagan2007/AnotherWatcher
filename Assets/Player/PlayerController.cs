@@ -162,12 +162,14 @@ public class PlayerController : MonoBehaviour
     {
         GroundedManagment();
 
+        Dash();
+
         if (!isDashing)
         {
             Move(); // movement to left and right
             Jump();
         }
-        Dash();
+        
     }
 
     private void GroundedManagment()
