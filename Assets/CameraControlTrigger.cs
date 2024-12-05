@@ -28,7 +28,7 @@ public class CameraControlTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Plyer"))
+        if (collision.CompareTag("Player"))
         {
             if (customInspectorObjects.panCameraOnContact)
             {

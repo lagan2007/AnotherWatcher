@@ -23,9 +23,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float jumpForce; // how strong is player jump
     [SerializeField]
+    float dashStrenght;
+    [SerializeField]
     LayerMask WhatIsGround; // layer that separets ground from everything else
     [SerializeField]
     private float jumpTime; // how long can player jump for
+    [SerializeField]
+    private float dashTime;
     [SerializeField]
     private Transform groundCheck;
     [SerializeField]
@@ -38,10 +42,15 @@ public class PlayerController : MonoBehaviour
 
     public float jumpTimeCounter; // how long is player already jumping for
 
+    public float dashTimeCounter;
+
     float jumpCount = 0; // maximal possible number of double-jumps
 
     public bool pressedJump; // update check for spacebar press
-    public bool holdingJump;
+    public bool holdingJump; // update check for spacebar hold
+    public bool pressedDash;
+
+    public bool isDashing = false;
     public bool isJumping = false;
     public bool grounded; // is player on ground?
 
@@ -65,21 +74,44 @@ public class PlayerController : MonoBehaviour
         grounded = IsGrounded();
 
         animator.SetFloat("PlayerSpeed", Mathf.Abs(playerBody.linearVelocityX));
+        animator.SetFloat("PlayerFallSpeed", playerBody.linearVelocityY);
 
         Debug.DrawLine(playerTransform.position, playerSpriteTransform.position, Color.green, 2); // just to visualize movement of player
+
         if (grounded)
         {
+
             jumpTimeCounter = jumpTime;
+            playerBody.gravityScale = 0;
+            animator.SetBool("Grounded", true);
+            if (!isDashing)
+            {
+                dashTimeCounter = dashTime;
+            }
         }
+        else
+        {
+            playerBody.gravityScale = 10;
+            animator.SetBool("Grounded", false);
+        }
+
         SpaceBarPressed();
         holdingJump = SpaceBarHold();
+        DashKeyPressed();
 
         CeilingHit();
 
-        time += Time.deltaTime;
+        time += Time.deltaTime; //session time
 
-        fps = Application.targetFrameRate;
+        fps = Application.targetFrameRate; // fps value (pre set)
 
+        
+        ManageCameras();
+        
+    }
+
+    private void ManageCameras()
+    {
         // if player is falling with at least ___ speed
         if (playerBody.linearVelocity.y < fallSpeedYDdampingTreshold && !CameraManager.instance.IsLerpingYDamping && !CameraManager.instance.LerpedFromLayerFalling)
         {
@@ -94,8 +126,6 @@ public class PlayerController : MonoBehaviour
 
             CameraManager.instance.LerpYDamping(false);
         }
-
-        
     }
 
    
@@ -127,6 +157,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void DashKeyPressed()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            pressedDash = true;
+ 
+        }
+
+        
+    }
+
     private bool SpaceBarHold()
     {
         return Input.GetKey(KeyCode.Space);
@@ -134,8 +175,12 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move(); // movement to left and right
-        Jump();
+        if (!isDashing)
+        {
+            Move(); // movement to left and right
+            Jump();
+        }
+        Dash();
     }
 
     private void Move()
@@ -158,6 +203,41 @@ public class PlayerController : MonoBehaviour
             playerTransform.rotation = Quaternion.Euler(0, 0, 0);
         }
 
+    }
+
+    private void Dash()
+    {
+        float rotationMUltiplier;
+
+        if(playerTransform.rotation.y < 0)
+        {
+            rotationMUltiplier = -1;
+        }
+        else
+        {
+            rotationMUltiplier = 1;
+        }
+
+        if (pressedDash)
+        {
+            isDashing = true;
+            isJumping = false;
+        }
+
+        if(isDashing && dashTimeCounter > 0)
+        {
+            playerBody.linearVelocity = new Vector2 (dashStrenght * rotationMUltiplier, 0);
+            dashTimeCounter -= Time.deltaTime;
+
+                
+        }else
+        {
+            isDashing = false;
+            pressedDash = false;
+        }
+
+            
+        
     }
 
 
