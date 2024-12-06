@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float jumpForce; // how strong is player jump
     [SerializeField]
+    float jumpCount;
+    [SerializeField]
     float dashStrenght;
     [SerializeField]
     LayerMask WhatIsGround; // layer that separets ground from everything else
@@ -44,14 +46,14 @@ public class PlayerController : MonoBehaviour
 
     public float dashTimeCounter;
 
-    float jumpCount = 0; // maximal possible number of double-jumps
-
     public bool pressedJump; // update check for spacebar press
     public bool holdingJump; // update check for spacebar hold
+    public bool releasedJump;
     public bool pressedDash;
 
     public bool isDashing = false;
-    public bool isJumping = false;
+    public bool isJumping;
+    public bool isDoingDouble;
     public bool grounded; // is player on ground?
 
     public float fps;
@@ -81,6 +83,7 @@ public class PlayerController : MonoBehaviour
         
 
         SpaceBarPressed();
+        JumpKeyReleased();
         holdingJump = SpaceBarHold();
         DashKeyPressed();
 
@@ -137,8 +140,17 @@ public class PlayerController : MonoBehaviour
 
     private void SpaceBarPressed()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && grounded){
+        if (Input.GetKeyDown(KeyCode.Space) && (grounded || jumpCount > 0)){
             pressedJump = true;
+
+        }
+    }
+
+    private void JumpKeyReleased()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            releasedJump = true;
         }
     }
 
@@ -162,14 +174,14 @@ public class PlayerController : MonoBehaviour
     {
         GroundedManagment();
 
-        Dash();
+        
 
         if (!isDashing)
         {
             Move(); // movement to left and right
             Jump();
         }
-        
+        Dash();
     }
 
     private void GroundedManagment()
@@ -180,8 +192,12 @@ public class PlayerController : MonoBehaviour
         {
 
             jumpTimeCounter = jumpTime;
-            playerBody.gravityScale = 0;
+            if (grounded || isDashing)
+            {
+                playerBody.gravityScale = 0;
+            }
             animator.SetBool("Grounded", true);
+            jumpCount = 1;
             if (!isDashing)
             {
                 dashTimeCounter = dashTime;
@@ -264,13 +280,20 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = true;
             pressedJump = false;
+            
         }
 
-        if (holdingJump)
+        if (pressedJump && !grounded && jumpCount > 0)
         {
-            if (jumpTimeCounter > 0 && isJumping)
+            isDoingDouble = true;
+        }
+
+        
+        
+        if (holdingJump && jumpTimeCounter > 0)
+        {
+            if (isJumping)
             {
-                //playerBody.velocity = Vector2.up * jumpForce;
                 velocity.y = jumpForce;
                 playerBody.linearVelocity = velocity;
                 jumpTimeCounter -= Time.deltaTime;
@@ -282,16 +305,26 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (!holdingJump)
+        if (isDoingDouble)
+        {
+            velocity.y = jumpForce;
+            playerBody.linearVelocity = velocity;
+            pressedJump = false;
+            isDoingDouble = false;
+            jumpCount -= 1;
+        }
+
+        if (releasedJump)
         {
             isJumping = false;
+            releasedJump = false;
         }
 
         
 
         //Debug.Log("Je ve skoku" + isJumping + " " + jumpTimeCounter);
     }
-
+    
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(groundCheck.position, feet.size * 0.85f);

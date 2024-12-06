@@ -2240,6 +2240,7 @@ MonoBehaviour:
   playerSpeed: 14
   changibleGravityStrenght: 75
   jumpForce: 30
+  jumpCount: 1
   dashStrenght: 50
   WhatIsGround:
     serializedVersion: 2
@@ -2250,10 +2251,12 @@ MonoBehaviour:
   ceilingCheck: {fileID: 968217261136946541}
   fpsSet: 300
   animator: {fileID: 968217262527798438}
-  jumpTimeCounter: 1
+  jumpTimeCounter: 0
   dashTimeCounter: 0
+  canDoubleJump: 0
   pressedJump: 0
   holdingJump: 0
+  releasedJump: 0
   pressedDash: 0
   isDashing: 0
   isJumping: 0
