@@ -205,7 +205,10 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            playerBody.gravityScale = 10;
+            if (!isDashing)
+            {
+                playerBody.gravityScale = 10;
+            }
             animator.SetBool("Grounded", false);
         }
     }
@@ -255,6 +258,7 @@ public class PlayerController : MonoBehaviour
         {
             playerBody.linearVelocity = new Vector2 (dashStrenght * rotationMUltiplier, 0);
             dashTimeCounter -= Time.deltaTime;
+            playerBody.gravityScale = 0;
 
                 
         }else
