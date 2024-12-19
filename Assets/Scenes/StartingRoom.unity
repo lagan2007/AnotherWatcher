@@ -310,9 +310,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 374500701}
   - {fileID: 494138922}
-  - {fileID: 1945394100}
   - {fileID: 151407489}
   - {fileID: 986565094}
   m_Father: {fileID: 0}
@@ -1554,12 +1552,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 374500700}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 240620287}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!66 &374500702
 CompositeCollider2D:
@@ -1599,7 +1597,17 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 374500704}
+    m_ColliderPaths:
+    - - X: 395494304
+        Y: 707667968
+      - X: -406845920
+        Y: 707667968
+      - X: -406845920
+        Y: -54946976
+      - X: 395494304
+        Y: -54946976
   m_CompositePaths:
     m_Paths:
     - - {x: 39.5494, y: -5.4946976}
@@ -2052,18 +2060,13 @@ Transform:
   - {fileID: 286799189}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1945394100 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8614719158908324553, guid: 92596cf2f85b2264e880b0352ab38855, type: 3}
-  m_PrefabInstance: {fileID: 2120519509}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2120519509
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 240620287}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3778585693432786843, guid: 92596cf2f85b2264e880b0352ab38855, type: 3}
       propertyPath: DoorToSpawnTo
@@ -2176,3 +2179,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 240620287}
   - {fileID: 1705689508}
+  - {fileID: 374500701}
+  - {fileID: 2120519509}
