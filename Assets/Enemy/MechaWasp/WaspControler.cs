@@ -39,8 +39,10 @@ public class WaspControler : MonoBehaviour
     private void FixedUpdate()
     {
         RaycastHit2D vision = Physics2D.Raycast(this.transform.position, player.position - this.transform.position, visionRange);
-        
-        if (vision)
+
+        Debug.DrawRay(this.transform.position, player.position - this.transform.position, Color.red, 0.1f);
+
+        if (vision.collider != null)
         {
             bool seesPlayer = vision.collider.CompareTag("Player");
             if (seesPlayer)
@@ -57,10 +59,12 @@ public class WaspControler : MonoBehaviour
             {
                 AIDestinationSetter.target = null;
                 Debug.Log("hes gone");
-                Debug.DrawRay(this.transform.position, player.position - this.transform.position, Color.red, 0.1f);
+                
                 path.canMove = false;
             }
         }
+
+        
         
     }
 
