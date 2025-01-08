@@ -40,7 +40,14 @@ public class PlayerController : MonoBehaviour
     private int fpsSet;
     [SerializeField]
     private Animator animator;
-
+    [SerializeField]
+    private LayerMask Invincible;
+    [SerializeField]
+    private LayerMask Default;
+    [SerializeField]
+    KeyCode jumpButton;
+    [SerializeField]
+    KeyCode dashButton;
 
     public float jumpTimeCounter; // how long is player already jumping for
 
@@ -140,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
     private void SpaceBarPressed()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && (grounded || jumpCount > 0)){
+        if (Input.GetKeyDown(jumpButton) && (grounded || jumpCount > 0)){
             pressedJump = true;
 
         }
@@ -148,7 +155,7 @@ public class PlayerController : MonoBehaviour
 
     private void JumpKeyReleased()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(jumpButton))
         {
             releasedJump = true;
         }
@@ -156,7 +163,7 @@ public class PlayerController : MonoBehaviour
 
     private void DashKeyPressed()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(dashButton))
         {
             pressedDash = true;
  
@@ -167,14 +174,23 @@ public class PlayerController : MonoBehaviour
 
     private bool SpaceBarHold()
     {
-        return Input.GetKey(KeyCode.Space);
+        return Input.GetKey(jumpButton);
     }
 
     private void FixedUpdate()
     {
+        if (isDashing && this.gameObject.layer != Invincible)
+        {
+            this.gameObject.layer = Invincible;
+        }
+        /*else if(!isDashing && this.gameObject.layer != Default && dashTimeCounter <= 0)
+        {
+            this.gameObject.layer = Default;
+        }
+        */
+
         GroundedManagment();
 
-        
 
         if (!isDashing)
         {
@@ -237,6 +253,9 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
+        float inputVertical = Input.GetAxisRaw("Vertical");
+        float inputHorizontal = Input.GetAxisRaw("Horizontal");
+
         float rotationMUltiplier;
 
         if(playerTransform.rotation.y < 0)
@@ -256,18 +275,19 @@ public class PlayerController : MonoBehaviour
 
         if(isDashing && dashTimeCounter > 0)
         {
-            playerBody.linearVelocity = new Vector2 (dashStrenght * rotationMUltiplier, 0);
+            gameObject.layer = 7;
+            playerBody.linearVelocity = new Vector2 (dashStrenght * inputHorizontal /*rotationMUltiplier*/,dashStrenght * inputVertical / 2);
             dashTimeCounter -= Time.deltaTime;
             playerBody.gravityScale = 0;
 
                 
         }else
         {
+            gameObject.layer = 0;
             isDashing = false;
             pressedDash = false;
         }
 
-            
         
     }
 

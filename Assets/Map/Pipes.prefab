@@ -52,6 +52,16 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
+  - first: {x: 0, y: -1, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   - first: {x: -2, y: 0, z: 0}
     second:
       serializedVersion: 2
@@ -80,6 +90,8 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 439c8c32b9bb2c543adfe0d182dfc3da, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 37034e8726ef0a74e96103c53f34134c, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: ccbd4750c92f802448b1bbfecb0c281f, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 1
     m_Data: {fileID: 6489923522136271627, guid: e524a5852dac5ac40ab36d3062733f2d, type: 3}
@@ -87,8 +99,10 @@ Tilemap:
     m_Data: {fileID: 7324769136437959494, guid: 21d0e03b33facc042a65cbd417433851, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 6923377616471003135, guid: ce476afb80af16945b37b66ad54d4f3f, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 7363166705265310760, guid: aba2a8f7837aca944bca8e01f317c95f, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 3
+  - m_RefCount: 4
     m_Data:
       e00: 1
       e01: 0
@@ -107,13 +121,13 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 3
+  - m_RefCount: 4
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -2, y: -1, z: 0}
-  m_Size: {x: 2, y: 2, z: 1}
+  m_Size: {x: 3, y: 2, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -230,7 +244,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &5410036569204924005
+--- !u!114 &3001136758590029835
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
