@@ -28,7 +28,9 @@ public class WaspControler : MonoBehaviour
 
     public bool seesPlayer;
 
-    bool hasRun = false;
+
+    bool hasRunOnRoam = false;
+
     GameObject playerObj;
     private float lastPosX;
     public float timer;
@@ -131,16 +133,16 @@ public class WaspControler : MonoBehaviour
 
     private void Roam()
     {
-        if (path.reachedDestination && !hasRun && AIDestinationSetter.target == waypoints[waypointIndex].transform)
+        if (path.reachedDestination && !hasRunOnRoam && AIDestinationSetter.target == waypoints[waypointIndex].transform)
         {
-            hasRun = true;
+            hasRunOnRoam = true;
             waypointIndex = waypointIndex + 1;
             if (waypointIndex + 1 > waypointCount)
             {
                 waypointIndex = 0;
             }
             AIDestinationSetter.target = waypoints[waypointIndex].transform;
-            hasRun = false;
+            hasRunOnRoam = false;
         }
     }
 

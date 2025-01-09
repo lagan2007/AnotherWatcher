@@ -48,6 +48,9 @@ public class PlayerController : MonoBehaviour
     KeyCode jumpButton;
     [SerializeField]
     KeyCode dashButton;
+    [SerializeField]
+    float maxCoyotTime;
+    [SerializeField]
 
     public float jumpTimeCounter; // how long is player already jumping for
 
@@ -58,6 +61,8 @@ public class PlayerController : MonoBehaviour
     public bool releasedJump;
     public bool pressedDash;
 
+
+    public float coyotTime;
     public bool isDashing = false;
     public bool isJumping;
     public bool isDoingDouble;
@@ -66,6 +71,8 @@ public class PlayerController : MonoBehaviour
     public float fps;
     public float time;
 
+
+    bool hasRunOnDash = false;
     private float fallSpeedYDdampingTreshold;
 
     // Start is called before the first frame update
@@ -127,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
     private void CeilingHit()
     {
-        bool hitCeling = Physics2D.OverlapBox(ceilingCheck.position, feet.size * 0.85f, 0f, WhatIsGround);
+        bool hitCeling = Physics2D.OverlapBox(ceilingCheck.position, feet.size * 0.95f, 0f, WhatIsGround);
 
         var velocity = playerBody.linearVelocity;
 
@@ -142,7 +149,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        return Physics2D.OverlapBox(groundCheck.position, feet.size * 0.85f, 0f, WhatIsGround);
+        return Physics2D.OverlapBox(groundCheck.position, feet.size * 0.95f, 0f, WhatIsGround);
     }
 
     private void SpaceBarPressed()
@@ -202,30 +209,46 @@ public class PlayerController : MonoBehaviour
 
     private void GroundedManagment()
     {
-        grounded = IsGrounded();
+        if (IsGrounded())
+        {
+            jumpTimeCounter = jumpTime;
+            coyotTime = maxCoyotTime;
+            animator.SetBool("Grounded", true);
+        }
+
+        if (!IsGrounded())
+        {
+            coyotTime -=Time.deltaTime;
+            if (!isDashing)
+            {
+                playerBody.gravityScale = 10;
+                animator.SetBool("Grounded", false);
+            }
+        }
+
+        if(coyotTime >= 0)
+        {
+            grounded = true;
+        }
+        else
+        {
+            grounded = false;
+        }
 
         if (grounded)
         {
 
-            jumpTimeCounter = jumpTime;
-            if (grounded || isDashing)
+            
+            if (IsGrounded() || isDashing)
             {
                 playerBody.gravityScale = 0;
             }
-            animator.SetBool("Grounded", true);
+            
             jumpCount = 1;
             if (!isDashing)
             {
                 dashTimeCounter = dashTime;
             }
-        }
-        else
-        {
-            if (!isDashing)
-            {
-                playerBody.gravityScale = 10;
-            }
-            animator.SetBool("Grounded", false);
         }
     }
 
@@ -258,6 +281,8 @@ public class PlayerController : MonoBehaviour
 
         float rotationMUltiplier;
 
+
+
         if(playerTransform.rotation.y < 0)
         {
             rotationMUltiplier = -1;
@@ -275,15 +300,22 @@ public class PlayerController : MonoBehaviour
 
         if(isDashing && dashTimeCounter > 0)
         {
-            gameObject.layer = 7;
-            playerBody.linearVelocity = new Vector2 (dashStrenght * inputHorizontal /*rotationMUltiplier*/,dashStrenght * inputVertical / 2);
+            gameObject.layer = (LayerMask.NameToLayer("Invincible"));
+            playerBody.linearVelocity = new Vector2 (dashStrenght * inputHorizontal /*rotationMUltiplier*/,dashStrenght * inputVertical);
             dashTimeCounter -= Time.deltaTime;
             playerBody.gravityScale = 0;
-
+            hasRunOnDash = false;
                 
         }else
         {
-            gameObject.layer = 0;
+            if(!hasRunOnDash && inputVertical != -1)
+            {
+                var playerVelocity = playerBody.linearVelocity;
+                playerVelocity.y = 0;
+                playerBody.linearVelocity = playerVelocity;
+                hasRunOnDash = true;
+            }
+            gameObject.layer = (LayerMask.NameToLayer("Default"));
             isDashing = false;
             pressedDash = false;
         }
@@ -351,8 +383,8 @@ public class PlayerController : MonoBehaviour
     
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(groundCheck.position, feet.size * 0.85f);
-        Gizmos.DrawWireCube(ceilingCheck.position, feet.size * 0.85f);
+        Gizmos.DrawWireCube(groundCheck.position, feet.size * 0.95f);
+        Gizmos.DrawWireCube(ceilingCheck.position, feet.size * 0.95f);
     }
 
 }
