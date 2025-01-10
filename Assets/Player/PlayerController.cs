@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float maxCoyotTime;
     [SerializeField]
+    float maxDashCooldown;
 
     public float jumpTimeCounter; // how long is player already jumping for
 
@@ -61,7 +62,7 @@ public class PlayerController : MonoBehaviour
     public bool releasedJump;
     public bool pressedDash;
 
-
+    public float dashCooldown;
     public float coyotTime;
     public bool isDashing = false;
     public bool isJumping;
@@ -70,6 +71,9 @@ public class PlayerController : MonoBehaviour
 
     public float fps;
     public float time;
+
+    float finalVerticalInput;
+    float finalHorizontalInput;
 
 
     bool hasRunOnDash = false;
@@ -279,43 +283,63 @@ public class PlayerController : MonoBehaviour
         float inputVertical = Input.GetAxisRaw("Vertical");
         float inputHorizontal = Input.GetAxisRaw("Horizontal");
 
-        float rotationMUltiplier;
 
+        
 
-
-        if(playerTransform.rotation.y < 0)
+        if (inputVertical != 0)
         {
-            rotationMUltiplier = -1;
-        }
-        else
-        {
-            rotationMUltiplier = 1;
+            finalVerticalInput = inputVertical;
         }
 
-        if (pressedDash)
+        if (inputHorizontal != 0)
+        {
+            finalHorizontalInput = inputHorizontal;
+        }
+
+
+
+        if (pressedDash && (dashCooldown <= 0))
         {
             isDashing = true;
             isJumping = false;
         }
 
+        dashCooldown -= Time.deltaTime;
+
         if(isDashing && dashTimeCounter > 0)
         {
-            gameObject.layer = (LayerMask.NameToLayer("Invincible"));
-            playerBody.linearVelocity = new Vector2 (dashStrenght * inputHorizontal /*rotationMUltiplier*/,dashStrenght * inputVertical);
+            if (gameObject.layer != LayerMask.NameToLayer("Invincible"))
+            {
+                gameObject.layer = LayerMask.NameToLayer("Invincible");
+            }
+            playerBody.linearVelocity = new Vector2 (dashStrenght * finalHorizontalInput /*rotationMUltiplier*/, dashStrenght * finalVerticalInput);
             dashTimeCounter -= Time.deltaTime;
             playerBody.gravityScale = 0;
             hasRunOnDash = false;
-                
         }else
         {
-            if(!hasRunOnDash && inputVertical != -1)
+            if(!hasRunOnDash)
             {
-                var playerVelocity = playerBody.linearVelocity;
-                playerVelocity.y = 0;
-                playerBody.linearVelocity = playerVelocity;
-                hasRunOnDash = true;
+                if (IsGrounded())
+                {
+                    dashCooldown = maxDashCooldown;
+                }
+
+                if (inputVertical != -1)
+                {
+                    var playerVelocity = playerBody.linearVelocity;
+                    playerVelocity.y = 0;
+                    playerBody.linearVelocity = playerVelocity;
+                    hasRunOnDash = true;
+                }
             }
-            gameObject.layer = (LayerMask.NameToLayer("Default"));
+            
+
+            if(gameObject.layer != LayerMask.NameToLayer("Default"))
+            {
+                gameObject.layer = LayerMask.NameToLayer("Default");
+            }
+                
             isDashing = false;
             pressedDash = false;
         }

@@ -72,7 +72,7 @@ public class WaspControler : MonoBehaviour
 
         RaycastHit2D vision = Physics2D.Raycast(this.transform.position, playerTransform.position - this.transform.position, visionRange, noEnemyLayerMask);
 
-        Debug.DrawRay(this.transform.position, playerTransform.position - this.transform.position, Color.red, 0.1f);
+        Debug.DrawRay(this.transform.position, playerTransform.position - this.transform.position, Color.red, 0.01f);
 
         if (vision.collider != null)
         {
