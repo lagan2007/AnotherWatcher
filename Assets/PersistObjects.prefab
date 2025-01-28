@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 52642292834752606}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.2, y: -15.9, z: 0.3399691}
+  m_LocalPosition: {x: -0.1, y: -28.1, z: 0.3399691}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -109,8 +109,11 @@ MonoBehaviour:
   dashButton: 304
   maxCoyotTime: 0.24
   maxDashCooldown: 0.5
+  doorTriggerInteraction: {fileID: 0}
   jumpTimeCounter: 0
   dashTimeCounter: 0
+  canMove: 0
+  canMoveoCoolDown: 0
   pressedJump: 0
   holdingJump: 0
   releasedJump: 0
@@ -714,7 +717,7 @@ Transform:
   m_GameObject: {fileID: 3323368058319523719}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.630036, y: -19.062016, z: -10}
+  m_LocalPosition: {x: -0.53003716, y: -31.262016, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -743,7 +746,7 @@ MonoBehaviour:
   m_Follow: {fileID: 6461545233902580778}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 20
+    OrthographicSize: 15
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -773,8 +776,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BoundingShape2D: {fileID: 0}
-  m_Damping: 2
-  m_MaxWindowSize: -1
+  m_Damping: 5
+  m_MaxWindowSize: 2000
 --- !u!114 &2486564705654212481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -943,6 +946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d57f9baadadce849831c55ae7976ea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 6715679762258414657}
 --- !u!1 &4733838905294805241
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,7 +1050,7 @@ Transform:
   m_GameObject: {fileID: 4920511488181626287}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.630036, y: -19.062016, z: -10}
+  m_LocalPosition: {x: -0.53004575, y: -26.08689, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1087,7 +1091,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 20
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1461,8 +1465,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25f6181f3600751469d2289d2207e4e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   fadeOutImage: {fileID: 7717975837493735624}
-  fadeOutSpeed: 5
+  fadeOutSpeed: 6
   fadeInSpeed: 5
   fadeOutStartColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &9105225773711763926

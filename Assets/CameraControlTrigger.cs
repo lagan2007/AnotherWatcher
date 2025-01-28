@@ -2,10 +2,10 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 
 public class CameraControlTrigger : MonoBehaviour
-{
+{/*
     public CustomInspectorObjects customInspectorObjects;
 
     private Collider2D coll;
@@ -61,7 +61,7 @@ public enum PanDirection
     Right
 }
 
-[CustomEditor(typeof(CameraControlTrigger))]
+//[CustomEditor(typeof(CameraControlTrigger))]
 public class MyScriptEditor : Editor
 {
     CameraControlTrigger cameraControlTrigger;
@@ -102,4 +102,4 @@ public class MyScriptEditor : Editor
             EditorUtility.SetDirty(cameraControlTrigger);
         }
     }
-}
+*/}

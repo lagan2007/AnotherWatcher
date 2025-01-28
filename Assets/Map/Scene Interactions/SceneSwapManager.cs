@@ -11,10 +11,12 @@ public class SceneSwapManager : MonoBehaviour
 
     private GameObject player;
 
+    [SerializeField]
+    private PlayerController playerController;
 
-    private float doorOffset;
 
     private Transform doorTransform;
+
     private Vector3 playerSpawnPositon;
 
     private DoorTriggerInteraction.doorToSpawnAt _doorToSpawnto;
@@ -52,6 +54,9 @@ public class SceneSwapManager : MonoBehaviour
     {
         SceneFadeManager.instance.StartFadeut();
 
+        playerController.canMoveoCoolDown = 0.5f;
+        playerController.isDashing = false;
+
         while (SceneFadeManager.instance.isFadingOut)
         {
             yield return null;
@@ -74,6 +79,7 @@ public class SceneSwapManager : MonoBehaviour
             FindDoor(_doorToSpawnto);
             player.transform.position = playerSpawnPositon;
 
+            playerController.canMoveoCoolDown = 1;
             loadFromDoor = false;
         }
     }
@@ -99,4 +105,5 @@ public class SceneSwapManager : MonoBehaviour
     {
         playerSpawnPositon = new Vector3 (doorTransform.position.x, doorTransform.position.y, 0f);
     }
+
 }

@@ -6,6 +6,7 @@ public class TriggerInteractionBase : MonoBehaviour, IInteractible
 {
     public GameObject player { get; set; }
 
+
     public bool canInteract {  get; set; }
 
     private void Start()
@@ -17,10 +18,10 @@ public class TriggerInteractionBase : MonoBehaviour, IInteractible
     {
         if (canInteract)
         {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                Interact();
-            }
+            //if  (Input.GetKeyDown(KeyCode.F))
+            //{
+                //Interact();
+            //}
         }
     }
 
@@ -34,7 +35,10 @@ public class TriggerInteractionBase : MonoBehaviour, IInteractible
         if (collision.gameObject == player)
         {
             canInteract = true;
+            //This is modified to interact on contact
+            Interact();
         }
+        
     }
 
     private void OnTriggerExit2D(Collider2D collision)

@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager.Requests;
+//using UnityEditor.PackageManager.Requests;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -57,23 +58,29 @@ public class PlayerController : MonoBehaviour
 
     public float dashTimeCounter;
 
+    public bool canMove;
+    public float canMoveoCoolDown;
     public bool pressedJump; // update check for spacebar press
     public bool holdingJump; // update check for spacebar hold
     public bool releasedJump;
     public bool pressedDash;
 
+
+    
     public float dashCooldown;
     public float coyotTime;
     public bool isDashing = false;
     public bool isJumping;
     public bool isDoingDouble;
     public bool grounded; // is player on ground?
+    public bool hasRunOnGrounded;
 
     public float fps;
     public float time;
 
-    float finalVerticalInput;
     float finalHorizontalInput;
+
+    float calculatedMove;
 
 
     bool hasRunOnDash = false;
@@ -98,13 +105,13 @@ public class PlayerController : MonoBehaviour
 
         Debug.DrawLine(playerTransform.position, playerSpriteTransform.position, Color.green, 2); // just to visualize movement of player
 
-        
 
         SpaceBarPressed();
         JumpKeyReleased();
         holdingJump = SpaceBarHold();
         DashKeyPressed();
 
+      
         CeilingHit();
 
         time += Time.deltaTime; //session time
@@ -134,7 +141,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-   
 
     private void CeilingHit()
     {
@@ -185,22 +191,22 @@ public class PlayerController : MonoBehaviour
 
     private bool SpaceBarHold()
     {
-        return Input.GetKey(jumpButton);
+        if(isJumping)
+        {
+            return Input.GetKey(jumpButton);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private void FixedUpdate()
     {
-        if (isDashing && this.gameObject.layer != Invincible)
-        {
-            this.gameObject.layer = Invincible;
-        }
-        /*else if(!isDashing && this.gameObject.layer != Default && dashTimeCounter <= 0)
-        {
-            this.gameObject.layer = Default;
-        }
-        */
 
         GroundedManagment();
+
+        canMoveoCoolDown -= Time.deltaTime;
 
 
         if (!isDashing)
@@ -209,7 +215,13 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
         Dash();
+
+        if (canMoveoCoolDown >= 0)
+        {
+            playerBody.linearVelocity = new Vector2(0,0);
+        }
     }
+
 
     private void GroundedManagment()
     {
@@ -218,6 +230,11 @@ public class PlayerController : MonoBehaviour
             jumpTimeCounter = jumpTime;
             coyotTime = maxCoyotTime;
             animator.SetBool("Grounded", true);
+            if (!hasRunOnGrounded)
+            {
+                isJumping = false;
+                hasRunOnGrounded = true;
+            }
         }
 
         if (!IsGrounded())
@@ -228,6 +245,7 @@ public class PlayerController : MonoBehaviour
                 playerBody.gravityScale = 10;
                 animator.SetBool("Grounded", false);
             }
+            hasRunOnGrounded = false;
         }
 
         if(coyotTime >= 0)
@@ -259,7 +277,11 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         //get imput for moving right and left
-        float calculatedMove = Input.GetAxisRaw("Horizontal") * playerSpeed;
+       
+        calculatedMove = Input.GetAxisRaw("Horizontal") * playerSpeed;
+        
+
+      
 
         //move player
         playerBody.linearVelocity = new Vector2(calculatedMove, playerBody.linearVelocity.y);
@@ -284,14 +306,8 @@ public class PlayerController : MonoBehaviour
         float inputHorizontal = Input.GetAxisRaw("Horizontal");
 
 
-        
 
-        if (inputVertical != 0)
-        {
-            finalVerticalInput = inputVertical;
-        }
-
-        if (inputHorizontal != 0)
+        if (inputHorizontal != 0 || inputVertical != 0)
         {
             finalHorizontalInput = inputHorizontal;
         }
@@ -312,7 +328,7 @@ public class PlayerController : MonoBehaviour
             {
                 gameObject.layer = LayerMask.NameToLayer("Invincible");
             }
-            playerBody.linearVelocity = new Vector2 (dashStrenght * finalHorizontalInput /*rotationMUltiplier*/, dashStrenght * finalVerticalInput);
+            playerBody.linearVelocity = new Vector2 (dashStrenght * finalHorizontalInput, dashStrenght * inputVertical);
             dashTimeCounter -= Time.deltaTime;
             playerBody.gravityScale = 0;
             hasRunOnDash = false;
@@ -400,11 +416,14 @@ public class PlayerController : MonoBehaviour
             releasedJump = false;
         }
 
+
         
 
         //Debug.Log("Je ve skoku" + isJumping + " " + jumpTimeCounter);
     }
     
+    
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(groundCheck.position, feet.size * 0.95f);

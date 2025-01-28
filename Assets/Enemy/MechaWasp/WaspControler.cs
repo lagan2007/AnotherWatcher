@@ -116,11 +116,7 @@ public class WaspControler : MonoBehaviour
 
                 //path.canMove = false;
             }
-
         }
-
-        
-        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

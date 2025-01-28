@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class SceneFadeManager : MonoBehaviour
 {
+    [SerializeField]
+    GameObject  player;
+
+    float playerVelocity;
+
     public static SceneFadeManager instance;
 
     [SerializeField] private Image fadeOutImage;
