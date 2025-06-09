@@ -3,13 +3,14 @@ using UnityEngine;
 
 public class EnemyDamage : MonoBehaviour
 {
-    public int damage;
+    [SerializeField]
+    public int damage = 1;
 
     [SerializeField]
     PlayerHp playerHp;
 
     [SerializeField]
-    PlayerController playerController;
+    public PlayerController playerController;
 
     public Rigidbody2D playerBody;
 

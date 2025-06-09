@@ -935,7 +935,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!50 &393353570
 Rigidbody2D:
   serializedVersion: 5
@@ -1044,8 +1044,8 @@ MonoBehaviour:
   sword: {fileID: 4205775841444844553, guid: 386623ae2dd44b740b8c05b0a7a35f34, type: 3}
   animator: {fileID: 1745020384}
   swingAnim: {fileID: 4460225777265536781}
-  leapHeight: 7
-  leaptime: 0.5
+  leapHeight: 10
+  leaptime: 0.3
   isAttacking: 0
   hasRun: 0
   hasRun2: 0

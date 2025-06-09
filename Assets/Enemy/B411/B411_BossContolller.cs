@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class B411_BossContolller : MonoBehaviour
@@ -21,6 +22,10 @@ public class B411_BossContolller : MonoBehaviour
     [SerializeField]
     float leaptime;
 
+    [SerializeField]
+    public PlayerController playerController;
+
+
     Transform target;
 
     float timer;
@@ -29,63 +34,112 @@ public class B411_BossContolller : MonoBehaviour
     
     public bool hasRun;
     public bool hasRun2;
+    public int attack;
+    public int lastNumber = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //swing.SetActive(false);
         player = GameObject.FindGameObjectWithTag("Player");
+        playerController = player.GetComponent<PlayerController>();
+        //StartCoroutine(Leap());
+        //StartCoroutine(Slash());
+
+    }
+
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerController = player.GetComponent<PlayerController>();
+        StartCoroutine(Choose());
+    }
+
+    IEnumerator Choose()
+    {
+        attack = Random.Range(1, 4);
+        if (lastNumber == attack)
+        {
+            StartCoroutine(Choose());
+        }
+        else
+        {
+            lastNumber = attack;
+            StartCoroutine(Attack());
+            yield return null;
+        }
+        
+    }
+
+    IEnumerator Attack()
+    {
+        if (attack == 1)
+        {
+            StartCoroutine(Leap());
+        }
+        else if (attack == 2)
+        {
+            StartCoroutine(Slash());
+        }
+        else if(attack == 3)
+        {
+            StartCoroutine(Summon());
+        }
+        yield return null;
     }
 
     private void FixedUpdate()
     {
-        timer = timer + Time.deltaTime;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        Rotate();
-        //Leap();
-        //Slash();
-        Summon();
+
+        if (!isAttacking)
+        {
+            Rotate();
+        }
 
     }
 
-    private void Leap()
+
+    IEnumerator Leap()
     {
         isAttacking = true;
-        if (!hasRun)
-        {
+
             LeanTween.move(this.gameObject, new Vector2(this.transform.position.x, this.transform.position.y + leapHeight), leaptime);
 
-            hasRun = true;
-        }
-
-        if (!LeanTween.isTweening(this.gameObject) && !hasRun2)
-        {
+        yield return new WaitForSeconds(leaptime);
+        Rotate();
             target = player.transform;
-            LeanTween.move(this.gameObject,new Vector2(target.position.x, target.position.y + 1), leaptime);
+            LeanTween.move(this.gameObject, new Vector2(target.position.x, target.position.y + 1), leaptime);
 
-            hasRun2 = true;
-            isAttacking = false;
-        }
+        yield return new WaitForSeconds(leaptime);
+        isAttacking = false;
 
+        StartCoroutine(Choose());
+        yield return null;
     }
 
-    private void Slash()
+    IEnumerator Slash()
     {
         isAttacking = true;
-        swing.SetActive (true);
+        swing.SetActive(true);
         swing.transform.rotation = Quaternion.Euler(0f, 0f, 119.439f);
         swingAnim.Play("Swing");
-        if (swingAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !swingAnim.IsInTransition(0))
-        {
-            swing.SetActive (false);
-            isAttacking = false;
-        }
+
+        yield return new WaitForSeconds(0.75f);
+        playerController.virtualCameraPerlin.m_AmplitudeGain = 20;
+        yield return new WaitForSeconds(0.2f);
         
 
+        swing.SetActive(false);
+            isAttacking = false;
+        StartCoroutine(Choose());
+        yield return new WaitForSeconds(0.2f);
+        playerController.virtualCameraPerlin.m_AmplitudeGain = 0;
+        yield return null;
     }
 
     private void Away()
@@ -95,8 +149,7 @@ public class B411_BossContolller : MonoBehaviour
 
     private void Rotate()
     {
-        if (!isAttacking)
-        {
+        
             if (player.transform.position.x > this.transform.position.x)
             {
                 this.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
@@ -106,27 +159,27 @@ public class B411_BossContolller : MonoBehaviour
             {
                 this.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             }
-        }
+        
         
     }
 
 
     float playerX;
-    private void Summon()
+
+    IEnumerator Summon()
     {
-        if (!hasRun)
-        {
+       
             playerX = player.transform.position.x;
             timer = 0;
             Instantiate(sword, new Vector2(playerX, player.transform.position.y + 19.6f), Quaternion.Euler(0, 0, -90));
-            hasRun = true;
-        }
 
-        if(!hasRun2 && timer >= 0.25)
-        {
+        
+        yield return new WaitForSeconds(0.25f);
+       
             Instantiate(sword, new Vector2(playerX - 4, player.transform.position.y + 19.6f), Quaternion.Euler(0, 0, -90));
             Instantiate(sword, new Vector2(playerX + 4, player.transform.position.y + 19.6f), Quaternion.Euler(0, 0, -90));
-            hasRun2 = true;
-        }
+
+        StartCoroutine(Choose());
+        yield return null;
     }
 }

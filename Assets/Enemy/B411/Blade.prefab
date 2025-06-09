@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: -6455481550692962877}
+  collider: {fileID: 2379928952461024859}
   yPositionToStop: -8
 --- !u!50 &-6455481550692962877
 Rigidbody2D:
