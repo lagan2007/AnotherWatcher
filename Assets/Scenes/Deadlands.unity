@@ -28499,13 +28499,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4848226577162458449}
   - component: {fileID: 4460225777265536781}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blade
   m_TagString: Untagged
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6735565108217024184
 Transform:
   m_ObjectHideFlags: 0
@@ -28532,7 +28532,7 @@ GameObject:
   - component: {fileID: 6735565108217024184}
   - component: {fileID: 5758584418386518951}
   - component: {fileID: 5618250189505552852}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: B411_swing_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

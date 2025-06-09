@@ -89,7 +89,7 @@ public class EnemyDamage : MonoBehaviour
             
             
             
-            playerController.virtualCameraPerlin.m_AmplitudeGain = 20;
+            playerController.virtualCameraPerlin.m_AmplitudeGain = 5;
             timer = timer + Time.deltaTime;
             yield return null;
         }
