@@ -11,4 +11,20 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StartingRoom.unity
     guid: 94d6a4943e9454f4e9fb4991a6247003
+  - enabled: 1
+    path: Assets/Scenes/SlimeRoom.unity
+    guid: 5cca578921de4d242b55f6a8501ce8a2
+  - enabled: 1
+    path: Assets/Scenes/DashRoom.unity
+    guid: 1a1ff95327eb7b948b2d0798d6be5879
+  - enabled: 1
+    path: Assets/Scenes/DashTutorial.unity
+    guid: 7074d7fbfba6e374cbefd8adf170f21a
+  - enabled: 1
+    path: Assets/Scenes/SaveRoom1.unity
+    guid: 57b18daa7c509204b945e42abb06a934
+  - enabled: 1
+    path: Assets/Scenes/Deadlands.unity
+    guid: d810c81b7a33c714ab65bbe47f9852ec
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

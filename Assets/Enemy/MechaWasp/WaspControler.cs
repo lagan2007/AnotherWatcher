@@ -35,7 +35,7 @@ public class WaspControler : MonoBehaviour
     private float lastPosX;
     public float timer;
 
-   
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -117,6 +117,8 @@ public class WaspControler : MonoBehaviour
                 //path.canMove = false;
             }
         }
+        
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

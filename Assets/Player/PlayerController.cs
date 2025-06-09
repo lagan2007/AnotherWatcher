@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 //using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -53,6 +54,14 @@ public class PlayerController : MonoBehaviour
     float maxCoyotTime;
     [SerializeField]
     float maxDashCooldown;
+    [SerializeField]
+    SpriteRenderer spriteRenderer;
+    [SerializeField]
+    CinemachineVirtualCamera virtualCamera;
+    [SerializeField]
+    public ParticleSystem hitParticles;
+
+    public CinemachineBasicMultiChannelPerlin virtualCameraPerlin;
 
     public float jumpTimeCounter; // how long is player already jumping for
 
@@ -65,7 +74,7 @@ public class PlayerController : MonoBehaviour
     public bool releasedJump;
     public bool pressedDash;
 
-
+    public bool hasIFrames = false;
     
     public float dashCooldown;
     public float coyotTime;
@@ -91,6 +100,7 @@ public class PlayerController : MonoBehaviour
     {
         Application.targetFrameRate = fpsSet;
         fallSpeedYDdampingTreshold = CameraManager.instance.fallSpeedDampingChangeTreshold;
+        virtualCameraPerlin = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
 
@@ -98,6 +108,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         GroundedManagment();
 
         animator.SetFloat("PlayerSpeed", Mathf.Abs(playerBody.linearVelocityX));
@@ -122,6 +133,20 @@ public class PlayerController : MonoBehaviour
         ManageCameras();
         
     }
+
+    public IEnumerator flicker()
+    {
+        while (hasIFrames)
+        {
+            spriteRenderer.sortingOrder = -100;
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.sortingOrder = 1;
+            yield return new WaitForSeconds(0.1f);
+            yield return null;
+        }
+        
+    }
+
 
     private void ManageCameras()
     {
@@ -207,14 +232,29 @@ public class PlayerController : MonoBehaviour
         GroundedManagment();
 
         canMoveoCoolDown -= Time.deltaTime;
+       
 
+        if (canMove)
+        {
+            if (!isDashing)
+            {
+                //Move(); // movement to left and right
+                Jump();
+            }
+            Dash();
+        }
+        else
+        {
+            calculatedMove = 0;
+        }
 
         if (!isDashing)
         {
-            Move(); // movement to left and right
-            Jump();
+            Move();
         }
-        Dash();
+
+       //Debug.Log(calculatedMove);
+       
 
         if (canMoveoCoolDown >= 0)
         {
@@ -278,25 +318,29 @@ public class PlayerController : MonoBehaviour
     {
         //get imput for moving right and left
        
-        calculatedMove = Input.GetAxisRaw("Horizontal") * playerSpeed;
+        if (canMove)
+        {
+            calculatedMove = Input.GetAxisRaw("Horizontal") * playerSpeed;
+
+            //rotate player based on input
+            if (Input.GetAxisRaw("Horizontal") < 0)
+            {
+                playerTransform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+            else if (Input.GetAxisRaw("Horizontal") > 0)
+            {
+                playerTransform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+
+            playerBody.linearVelocity = new Vector2(calculatedMove, playerBody.linearVelocity.y);
+        }
+           
         
 
-      
 
-        //move player
-        playerBody.linearVelocity = new Vector2(calculatedMove, playerBody.linearVelocity.y);
 
-        
 
-        //rotate player based on input
-        if (Input.GetAxisRaw("Horizontal") < 0)
-        {
-            playerTransform.rotation = Quaternion.Euler(0, 180, 0);
-        }
-        else if (Input.GetAxisRaw("Horizontal") > 0)
-        {
-            playerTransform.rotation = Quaternion.Euler(0, 0, 0);
-        }
+
 
     }
 
@@ -351,7 +395,7 @@ public class PlayerController : MonoBehaviour
             }
             
 
-            if(gameObject.layer != LayerMask.NameToLayer("Default"))
+            if(gameObject.layer != LayerMask.NameToLayer("Default") && !hasIFrames)
             {
                 gameObject.layer = LayerMask.NameToLayer("Default");
             }

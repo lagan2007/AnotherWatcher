@@ -36958,7 +36958,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5367569215981016118, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19.360205
+      value: -19.430037
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367569215981016118, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -35.912018
       objectReference: {fileID: 0}
     - target: {fileID: 6278538315332756873, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
       propertyPath: m_LocalPosition.y
@@ -36966,11 +36970,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6437505808013467816, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.400043
+      value: 99.8
       objectReference: {fileID: 0}
     - target: {fileID: 6437505808013467816, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 19.887215
+      value: 54.7
       objectReference: {fileID: 0}
     - target: {fileID: 6437505808013467816, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -37269,9 +37273,13 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5344093331790926220, guid: 92596cf2f85b2264e880b0352ab38855, type: 3}
+      propertyPath: sceneToLoad._sceneName
+      value: SaveRoom1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344093331790926220, guid: 92596cf2f85b2264e880b0352ab38855, type: 3}
       propertyPath: sceneToLoad._sceneAsset
       value: 
-      objectReference: {fileID: 102900000, guid: 2cda990e2423bbf4892e6590ba056729, type: 3}
+      objectReference: {fileID: 102900000, guid: 57b18daa7c509204b945e42abb06a934, type: 3}
     - target: {fileID: 5900437697480785634, guid: 92596cf2f85b2264e880b0352ab38855, type: 3}
       propertyPath: m_IsActive
       value: 1
