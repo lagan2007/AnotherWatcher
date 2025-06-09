@@ -34,6 +34,8 @@ public class EnemyDamage : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
+
+
             playerHp = collision.gameObject.GetComponent<PlayerHp>();
             playerController = collision.gameObject.gameObject.GetComponent<PlayerController>();
             playerBody = collision.gameObject.GetComponent<Rigidbody2D>();
@@ -104,10 +106,19 @@ public class EnemyDamage : MonoBehaviour
         playerController.virtualCameraPerlin.m_AmplitudeGain = 0;
         playerController.canMove = true;
 
+
+        Debug.Log("pre Iframes");
+        yield return null;
         yield return new WaitForSeconds(1.8f);
-        player.layer = LayerMask.NameToLayer("Default");
+
         playerController.hasIFrames = false;
+        player.layer = LayerMask.NameToLayer("Default");
+
+        Debug.Log("post Iframes");
+        yield return null;
     }
+
+
 
     
 }

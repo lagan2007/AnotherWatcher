@@ -10,6 +10,9 @@ public class FallingBlade : MonoBehaviour
     Collider2D collider;
 
     [SerializeField]
+    SpriteRenderer spriteRenderer;
+
+    [SerializeField]
     float yPositionToStop;
 
     float timer;
@@ -46,10 +49,17 @@ public class FallingBlade : MonoBehaviour
             timer2 = timer2 + Time.deltaTime;
             body.gravityScale = 0;
             body.linearVelocity = Vector2.down * 0;
-            collider.enabled = false;
+
+                collider.enabled = false;
+            
         }
 
         if (timer2 >= 0.5)
+        {
+            spriteRenderer.sortingOrder = -100;
+        }
+
+        if (timer2 >= 3)
         {
             Object.Destroy(this.gameObject);
         }

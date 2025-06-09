@@ -179,6 +179,7 @@ public class B411_BossContolller : MonoBehaviour
        
             Instantiate(sword, new Vector2(playerX - 4, player.transform.position.y + 19.6f), Quaternion.Euler(0, 0, -90));
             Instantiate(sword, new Vector2(playerX + 4, player.transform.position.y + 19.6f), Quaternion.Euler(0, 0, -90));
+        
         StartCoroutine(Choose());
         yield return null;
     }

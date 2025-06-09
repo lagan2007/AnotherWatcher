@@ -13,6 +13,11 @@ public class PlayerDamage : MonoBehaviour
     [SerializeField]
     float manaGain;
 
+    private void Update()
+    {
+        this.gameObject.layer = LayerMask.NameToLayer("Default");
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Enemy")

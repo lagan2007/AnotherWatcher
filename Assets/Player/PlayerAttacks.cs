@@ -9,6 +9,9 @@ public class PlayerAttacks : MonoBehaviour
     private GameObject attack;
 
     [SerializeField]
+    KeyCode attackKey;
+
+    [SerializeField]
     float attackTimeCounter;
 
     [SerializeField]
@@ -24,7 +27,7 @@ public class PlayerAttacks : MonoBehaviour
 
     private void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.P)) 
+        if (Input.GetKeyDown(attackKey)) 
         {
             isAttacking = true;
             attackTimeCounter = attackTime;

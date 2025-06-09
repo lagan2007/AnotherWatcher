@@ -18,6 +18,9 @@ public class Save : MonoBehaviour
     [SerializeField]
     PlayerHp playerHp;
 
+    [SerializeField]
+    SpriteRenderer spriteRenderer;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -51,6 +54,8 @@ public class Save : MonoBehaviour
             //reset death
             playerHp.hasRun = false;
             playerHp.hasDied = false;
+            //debug visuals
+            spriteRenderer.sortingOrder = 1;
         }
         
     }
