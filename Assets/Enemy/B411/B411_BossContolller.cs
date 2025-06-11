@@ -23,6 +23,9 @@ public class B411_BossContolller : MonoBehaviour
     float leaptime;
 
     [SerializeField]
+    Rigidbody2D rb;
+
+    [SerializeField]
     public PlayerController playerController;
 
 
@@ -97,6 +100,11 @@ public class B411_BossContolller : MonoBehaviour
     void Update()
     {
 
+        if (this.transform.position.y < -13)
+        {
+            this.transform.position = new Vector2(this.transform.position.x, -13);
+        }
+
         if (!isAttacking)
         {
             Rotate();
@@ -108,16 +116,34 @@ public class B411_BossContolller : MonoBehaviour
     IEnumerator Leap()
     {
         isAttacking = true;
+        animator.Play("Jump");
+        yield return new WaitForSeconds(0.20f);
 
-            LeanTween.move(this.gameObject, new Vector2(this.transform.position.x, this.transform.position.y + leapHeight), leaptime);
+
+        LeanTween.move(this.gameObject, new Vector2(this.transform.position.x, this.transform.position.y + leapHeight), leaptime);
 
         yield return new WaitForSeconds(leaptime);
+        animator.Play("Kick");
         Rotate();
             target = player.transform;
             LeanTween.move(this.gameObject, new Vector2(target.position.x, target.position.y + 1), leaptime);
+        float timer = 0;
 
-        yield return new WaitForSeconds(leaptime);
+        while (timer < leaptime)
+        {
+            Rotate();
+            timer = timer + Time.deltaTime;
+            yield return null;
+        }
+        
         isAttacking = false;
+        while (this.transform.position.y > -13)
+        {
+            rb.gravityScale = 9;
+            yield return null;
+        }
+
+        rb.gravityScale = 0;
 
         StartCoroutine(Choose());
         yield return null;
@@ -141,11 +167,6 @@ public class B411_BossContolller : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         playerController.virtualCameraPerlin.m_AmplitudeGain = 0;
         yield return null;
-    }
-
-    private void Away()
-    {
-
     }
 
     private void Rotate()

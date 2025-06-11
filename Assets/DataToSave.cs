@@ -6,4 +6,5 @@ public class DataToSave
     public Vector3 playerPosition;
     public bool alive;
     public int hp;
+    public bool dashObtained;
 }

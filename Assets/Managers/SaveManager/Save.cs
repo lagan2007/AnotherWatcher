@@ -48,6 +48,8 @@ public class Save : MonoBehaviour
             player.active = dataToSave.alive;
             //load hp
             playerHp.currentHp = dataToSave.hp;
+            //load if player can dash
+            playerController.dashObtained = dataToSave.dashObtained;
             //debug invincibility
             player.layer = LayerMask.NameToLayer("Default");
             playerController.hasIFrames = false;
@@ -75,6 +77,8 @@ public class Save : MonoBehaviour
             //full heal and save hp
             playerHp.currentHp = playerHp.maxHp;
             dataToSave.hp = playerHp.currentHp;
+            //can player Dash?
+            dataToSave.dashObtained = playerController.dashObtained;
 
             string json = JsonUtility.ToJson(dataToSave);
             File.WriteAllText(Application.dataPath + "/playerData.json", json);

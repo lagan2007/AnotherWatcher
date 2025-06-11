@@ -9,6 +9,9 @@ public class PlayerAttacks : MonoBehaviour
     private GameObject attack;
 
     [SerializeField]
+    private GameObject collider;
+
+    [SerializeField]
     KeyCode attackKey;
 
     [SerializeField]
@@ -16,13 +19,21 @@ public class PlayerAttacks : MonoBehaviour
 
     [SerializeField]
     float attackTime;
+
+    float cooldown;
     private bool isAttacking;
 
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Attack();
+    }
+
+    private void Update()
+    {
+        this.gameObject.layer = LayerMask.NameToLayer("Default");
+        collider.layer = LayerMask.NameToLayer("Default");
     }
 
     private void Attack()
@@ -36,12 +47,14 @@ public class PlayerAttacks : MonoBehaviour
         if(isAttacking && attackTimeCounter > 0)
         {
             attack.SetActive(true);
+            collider.SetActive(true);
             attackTimeCounter -= Time.deltaTime;
-
+            cooldown = 0;
         }
         else
         {
             attack.SetActive(false);
+            collider.SetActive(false);
         }
     }
 }

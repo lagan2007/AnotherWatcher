@@ -185,6 +185,8 @@ MonoBehaviour:
   body: {fileID: -6455481550692962877}
   collider: {fileID: 2379928952461024859}
   spriteRenderer: {fileID: 2528109313317379112}
+  brokenBlade: {fileID: -1977292080542109828, guid: a429085ae352a894abb0be934e97b130, type: 3}
+  sword: {fileID: 1582897244238384850}
   yPositionToStop: -8
 --- !u!50 &-6455481550692962877
 Rigidbody2D:
@@ -287,5 +289,4 @@ MonoBehaviour:
   damage: 1
   playerHp: {fileID: 0}
   playerController: {fileID: 0}
-  playerBody: {fileID: 0}
   player: {fileID: 0}

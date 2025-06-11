@@ -12,21 +12,26 @@ public class EnemyDamage : MonoBehaviour
     [SerializeField]
     public PlayerController playerController;
 
-    public Rigidbody2D playerBody;
-
     public GameObject player;
 
-    bool playerIsOnRight;
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            playerController = collision.gameObject.GetComponent<PlayerController>();
+
+
             playerHp = collision.gameObject.GetComponent<PlayerHp>();
-            playerBody = collision.gameObject.GetComponent<Rigidbody2D>();
-            player = collision.gameObject.GetComponent<GameObject>();
+            playerController = collision.gameObject.gameObject.GetComponent<PlayerController>();
+            player = collision.gameObject;
+
             playerHp.TakeDamage(damage);
+
+            playerController.hitParticles.Play();
+            CheckSides();
+            StartCoroutine(playerController.Knockback());
+
         }
     }
 
@@ -38,18 +43,13 @@ public class EnemyDamage : MonoBehaviour
 
             playerHp = collision.gameObject.GetComponent<PlayerHp>();
             playerController = collision.gameObject.gameObject.GetComponent<PlayerController>();
-            playerBody = collision.gameObject.GetComponent<Rigidbody2D>();
             player = collision.gameObject;
-            if (playerHp.currentHp > 0)
-            {
-                playerController.hasIFrames = true;
-                player.layer = LayerMask.NameToLayer("Invincible");
-            }
+            
             playerHp.TakeDamage(damage);
-            CheckSides();
+            
             playerController.hitParticles.Play();
-
-            StartCoroutine(Knockback());
+            CheckSides();
+            StartCoroutine(playerController.Knockback());
             
         }
 
@@ -60,23 +60,31 @@ public class EnemyDamage : MonoBehaviour
     {
         if (this.transform.position.x > player.transform.position.x)
         {
-            playerIsOnRight = false;
+            playerController.playerIsOnRight = false;
         }
         else
         {
-            playerIsOnRight = true;
+            playerController.playerIsOnRight = true;
         }
     }
-
+    /*
     float knockbackTime = 0.2f;
 
-    IEnumerator Knockback()
+    public IEnumerator Knockback()
     {
-        float timer = 0;
+        if (playerHp.currentHp > 0)
+        {
+            playerController.hasIFrames = true;
+            player.layer = LayerMask.NameToLayer("Invincible");
+        }
+
+        
+
+        float kTimer = 0;
 
         playerController.canMove = false;
         
-        while (timer <= knockbackTime)
+        while (kTimer <= knockbackTime)
         {
             if (playerIsOnRight)
             {
@@ -92,7 +100,7 @@ public class EnemyDamage : MonoBehaviour
             
             
             playerController.virtualCameraPerlin.m_AmplitudeGain = 5;
-            timer = timer + Time.deltaTime;
+            kTimer = kTimer + Time.deltaTime;
             yield return null;
         }
 
@@ -107,17 +115,16 @@ public class EnemyDamage : MonoBehaviour
         playerController.canMove = true;
 
 
-        Debug.Log("pre Iframes");
-        yield return null;
+
         yield return new WaitForSeconds(1.8f);
 
         playerController.hasIFrames = false;
         player.layer = LayerMask.NameToLayer("Default");
 
-        Debug.Log("post Iframes");
+        
         yield return null;
     }
-
+    */
 
 
     

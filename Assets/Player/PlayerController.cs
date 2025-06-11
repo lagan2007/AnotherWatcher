@@ -60,6 +60,8 @@ public class PlayerController : MonoBehaviour
     CinemachineVirtualCamera virtualCamera;
     [SerializeField]
     public ParticleSystem hitParticles;
+    [SerializeField]
+    PlayerHp playerHp;
 
     public CinemachineBasicMultiChannelPerlin virtualCameraPerlin;
 
@@ -75,6 +77,7 @@ public class PlayerController : MonoBehaviour
     public bool pressedDash;
 
     public bool hasIFrames = false;
+    public bool dashObtained;
     
     public float dashCooldown;
     public float coyotTime;
@@ -94,6 +97,8 @@ public class PlayerController : MonoBehaviour
 
     bool hasRunOnDash = false;
     private float fallSpeedYDdampingTreshold;
+
+    public bool playerIsOnRight;
 
     // Start is called before the first frame update
     void Start()
@@ -134,13 +139,72 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    float knockbackTime = 0.2f;
+
+    public IEnumerator Knockback()
+    {
+        if (playerHp.currentHp > 0)
+        {
+            hasIFrames = true;
+            this.gameObject.layer = LayerMask.NameToLayer("Invincible");
+        }
+
+
+
+        float kTimer = 0;
+
+        canMove = false;
+
+        while (kTimer <= knockbackTime)
+        {
+            if (playerIsOnRight)
+            {
+                playerBody.linearVelocity = new Vector2(15, 15);
+            }
+            else
+            {
+                playerBody.linearVelocity = new Vector2(-15, 15);
+            }
+
+
+
+
+
+            virtualCameraPerlin.m_AmplitudeGain = 5;
+            kTimer = kTimer + Time.deltaTime;
+            yield return null;
+        }
+
+        if (playerHp.currentHp > 0)
+        {
+            StartCoroutine(flicker());
+        }
+
+
+        yield return new WaitForSeconds(0.2f);
+        virtualCameraPerlin.m_AmplitudeGain = 0;
+        canMove = true;
+
+
+
+        yield return new WaitForSeconds(1.8f);
+
+        hasIFrames = false;
+        this.gameObject.layer = LayerMask.NameToLayer("Default");
+
+
+        yield return null;
+    }
+
     public IEnumerator flicker()
     {
         while (hasIFrames)
         {
             spriteRenderer.sortingOrder = -100;
+            spriteRenderer.sortingLayerName = "BackGround";
             yield return new WaitForSeconds(0.1f);
             spriteRenderer.sortingOrder = 1;
+            spriteRenderer.sortingLayerName = "Default";
             yield return new WaitForSeconds(0.1f);
             yield return null;
         }
@@ -232,7 +296,7 @@ public class PlayerController : MonoBehaviour
         GroundedManagment();
 
         canMoveoCoolDown -= Time.deltaTime;
-       
+
 
         if (canMove)
         {
@@ -241,7 +305,11 @@ public class PlayerController : MonoBehaviour
                 //Move(); // movement to left and right
                 Jump();
             }
-            Dash();
+            if (dashObtained)
+            {
+                Dash();
+            }
+            
         }
         else
         {
