@@ -3,15 +3,18 @@ using UnityEngine;
 public class Crystal : MonoBehaviour
 {
 
-    GameObject player;
-    PlayerController playerController;
-    Save save;
+    public GameObject player;
+    public PlayerController playerController;
+    public GameObject saveObj;
+    public Save save;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        saveObj = GameObject.FindGameObjectWithTag("SaveManager");
         playerController = player.GetComponent<PlayerController>();
+        save = saveObj.GetComponent<Save>();
     }
 
     // Update is called once per frame
@@ -32,6 +35,7 @@ public class Crystal : MonoBehaviour
         {
             player = collision.gameObject;
             playerController = collision.GetComponent<PlayerController>();
+            //save = collision.gameObject.gameObject.GetComponent<Save>();
             playerController.dashObtained = true;
             StartCoroutine(save.SaveCoroutine());
         }

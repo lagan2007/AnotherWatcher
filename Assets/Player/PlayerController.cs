@@ -126,7 +126,17 @@ public class PlayerController : MonoBehaviour
         GroundedManagment();
 
         animator.SetFloat("PlayerSpeed", Mathf.Abs(playerBody.linearVelocityX));
+        animator.SetBool("isDashing", isDashing);
         animator.SetFloat("PlayerFallSpeed", playerBody.linearVelocityY);
+        if (isJumping || isDoingDouble)
+        {
+            animator.SetBool("isJumping", true);
+        }
+        else
+        {
+            animator.SetBool("isJumping", false);
+        }
+        
 
         Debug.DrawLine(playerTransform.position, playerSpriteTransform.position, Color.green, 2); // just to visualize movement of player
 
@@ -484,6 +494,7 @@ public class PlayerController : MonoBehaviour
             isDashing = false;
             pressedDash = false;
         }
+
 
         
     }

@@ -22,12 +22,13 @@ public class PlayerAttacks : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        PreAttack();
+        
     }
 
     private void Update()
     {
         //this.gameObject.layer = LayerMask.NameToLayer("Default");
+        PreAttack();
         collider.layer = LayerMask.NameToLayer("Default");
     }
 

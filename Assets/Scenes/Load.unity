@@ -395,6 +395,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 558508960176417621, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 558508960176417621, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1566076863601866850, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
       propertyPath: m_Name
       value: PersistObjects
@@ -437,6 +445,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6437505808013467816, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190831505563527357, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190831505563527357, guid: 2bdb9c06dd118bc4687039cb44a9dd34, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
