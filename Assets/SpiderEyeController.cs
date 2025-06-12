@@ -1,3 +1,4 @@
+using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -34,10 +35,15 @@ public class SpiderEyeController : MonoBehaviour
     float legSpeed;
 
     [SerializeField]
+    AIDestinationSetter destinationSetter;
+
+    [SerializeField]
     LayerMask whatIsGround;
     public bool debugFollowPlayer;
 
     float timer;
+
+    GameObject playerObj;
 
     private int leftLegIndex = 1;
 
@@ -53,7 +59,9 @@ public class SpiderEyeController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-       
+       playerObj = GameObject.FindGameObjectWithTag("Player");
+       player = playerObj.transform;
+       destinationSetter.target = player;
     }
 
     private void Update()

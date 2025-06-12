@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerAbilities : MonoBehaviour
@@ -11,7 +12,16 @@ public class PlayerAbilities : MonoBehaviour
     [SerializeField]
     KeyCode healKey;
 
+    [SerializeField]
+    ParticleSystem particleHeal;
+
+    [SerializeField]
+    ParticleSystem particle;
+
     float manaSpentToHeal;
+
+    bool hasRun = false;
+    bool hasRun2 = false;
 
     private void Start()
     {
@@ -24,19 +34,37 @@ public class PlayerAbilities : MonoBehaviour
     {
         if (Input.GetKey(healKey) && playerMana.currentMana > 0)
         {
-            playerMana.currentMana -= Time.deltaTime * 15;
-            manaSpentToHeal += Time.deltaTime * 15;
+            playerMana.currentMana -= Time.deltaTime * 20;
+            manaSpentToHeal += Time.deltaTime * 20;
+            if (!hasRun)
+            {
+                particleHeal.Play();
+                hasRun = true;
+            }
+            hasRun2 = false;
+            
         }
         else
         {
-            manaSpentToHeal = 0;
+            //manaSpentToHeal = 0;
+            if (!hasRun2)
+            {
+                particleHeal.Stop();
+                hasRun2 = true;
+            }
+
+            hasRun = false;
+            
         }
 
         if (manaSpentToHeal >= 30)
         {
             playerHp.currentHp += 1;
+            particle.Play();
             manaSpentToHeal = 0;
         }
+
+
 
         //Debug.Log(playerMana.currentMana);
     }

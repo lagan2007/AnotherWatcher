@@ -11,11 +11,14 @@ public class PlayerDamage : MonoBehaviour
     PlayerMana playerMana;
 
     [SerializeField]
+    ParticleSystem particle;
+
+    [SerializeField]
     float manaGain;
 
     private void Update()
     {
-        this.gameObject.layer = LayerMask.NameToLayer("Default");
+        //this.gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -24,6 +27,7 @@ public class PlayerDamage : MonoBehaviour
         {
             enemyHp = collision.gameObject.GetComponent<EnemyHp>();
             enemyHp.TakeDamage(damage);
+            particle.Play();
 
             playerMana.currentMana += manaGain;
         }

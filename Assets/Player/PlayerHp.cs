@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHp : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class PlayerHp : MonoBehaviour
 
     [SerializeField]
     GameObject wakeUpPanel;
+
+    public Slider slider;
 
     public int currentHp;
 
@@ -31,7 +34,7 @@ public class PlayerHp : MonoBehaviour
         {
             currentHp = maxHp;
         }
-
+        slider.value = currentHp;
         if (currentHp <= 0 && !hasRun)
         {
             StartCoroutine(Die());
@@ -46,7 +49,7 @@ public class PlayerHp : MonoBehaviour
         wakeUpPanel.SetActive(false);
         hasDied = true;
         //gameObject.active = false;
-        save.LoadData();
+        StartCoroutine(save.LoadData());
         yield return null;
     }
 

@@ -62,6 +62,8 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem hitParticles;
     [SerializeField]
     PlayerHp playerHp;
+    [SerializeField]
+    Save save;
 
     public CinemachineBasicMultiChannelPerlin virtualCameraPerlin;
 
@@ -108,7 +110,14 @@ public class PlayerController : MonoBehaviour
         virtualCameraPerlin = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Save"))
+        {
+            save.SaveData();
+        }
 
+    }
 
     // Update is called once per frame
     void Update()
@@ -125,7 +134,11 @@ public class PlayerController : MonoBehaviour
         SpaceBarPressed();
         JumpKeyReleased();
         holdingJump = SpaceBarHold();
-        DashKeyPressed();
+        if (dashObtained)
+        {
+            DashKeyPressed();
+        }
+        
 
       
         CeilingHit();

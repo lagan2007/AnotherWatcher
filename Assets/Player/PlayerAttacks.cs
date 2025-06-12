@@ -14,47 +14,45 @@ public class PlayerAttacks : MonoBehaviour
     [SerializeField]
     KeyCode attackKey;
 
-    [SerializeField]
-    float attackTimeCounter;
 
-    [SerializeField]
-    float attackTime;
-
-    float cooldown;
+    bool canAttack = true;
     private bool isAttacking;
 
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Attack();
+        PreAttack();
     }
 
     private void Update()
     {
-        this.gameObject.layer = LayerMask.NameToLayer("Default");
+        //this.gameObject.layer = LayerMask.NameToLayer("Default");
         collider.layer = LayerMask.NameToLayer("Default");
     }
 
-    private void Attack()
+    void PreAttack()
     {
-        if (Input.GetKeyDown(attackKey)) 
+        if (Input.GetKeyDown(attackKey) && canAttack)
         {
-            isAttacking = true;
-            attackTimeCounter = attackTime;
+            StartCoroutine(Attack());
         }
+    }
 
-        if(isAttacking && attackTimeCounter > 0)
-        {
-            attack.SetActive(true);
-            collider.SetActive(true);
-            attackTimeCounter -= Time.deltaTime;
-            cooldown = 0;
-        }
-        else
-        {
+    IEnumerator Attack()
+    {
+        canAttack = false;
+        attack.SetActive(true);
+        collider.SetActive(true);
+
+        yield return new WaitForSeconds(0.2f);
+
             attack.SetActive(false);
             collider.SetActive(false);
-        }
+
+        yield return new WaitForSeconds(0.3f);
+        canAttack = true;
+
+        yield return null;
     }
 }
